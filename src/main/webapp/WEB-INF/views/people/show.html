@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p th:text="${person.getPerson_name()}">Value</p>
+<p th:text="${person.getPerson_bd()}">Value</p>
+<form th:method="POST" th:action="@{/people/{id}(id=${person.getPerson_id()})}">
+    <input type="hidden" name="_method" value="DELETE" />
+    <input type="submit" value="Удалить">
+</form>
+<a th:href="@{/people/{id}/edit(id=${person.getPerson_id()})}">Изменить что-то</a> <br>
+<a href="/people">Обратно к Людям</a>
+</body>
+</html>
