@@ -1,5 +1,7 @@
 package ru.mixaron.Project1Spring.PersonAndBooks;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
@@ -13,8 +15,8 @@ public class Book {
     @Size(min = 2, max = 50, message = "Author cant be so small or so big")
     private String book_author;
 
-    @NotEmpty(message = "Year CANT be Empty")
-    @Size(min = 4, max = 4, message = "Year must consist from 4 symbols")
+    @Min(value = 0, message = "Min Year 0")
+    @Max(value = 2023, message = "Max year 2023")
     private int year;
 
     private int book_id;

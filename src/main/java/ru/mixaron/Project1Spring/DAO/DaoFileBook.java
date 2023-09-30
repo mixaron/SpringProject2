@@ -23,7 +23,7 @@ public class DaoFileBook {
     }
 
     public void newPersonBook(Book book) {
-        jdbcTemplate.update("INSERT INTO book(book_name, book_author, book_year) VALUES(?,?,?)",
+        jdbcTemplate.update("INSERT INTO book(book_name, book_author, year) VALUES(?,?,?)",
                 book.getBook_name(),book.getBook_author(), book.getYear());
     }
 
@@ -33,7 +33,7 @@ public class DaoFileBook {
     }
 
     public void updateBook(int id, Book book) {
-        jdbcTemplate.update("UPDATE book SET book_name=?, book_author=?, book_year=? WHERE book_id = ?",
+        jdbcTemplate.update("UPDATE book SET book_name=?, book_author=?, year=? WHERE book_id = ?",
                 book.getBook_name(), book.getBook_author(),  book.getYear(), id);
     }
 
