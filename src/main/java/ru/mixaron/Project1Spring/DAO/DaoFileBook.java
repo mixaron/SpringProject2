@@ -1,6 +1,7 @@
 package ru.mixaron.Project1Spring.DAO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -40,4 +41,11 @@ public class DaoFileBook {
     public void deleteBook(int id) {
         jdbcTemplate.update("DELETE FROM book WHERE book_id=?", id);
     }
+
+
+    public boolean isPerson(int id) {
+        Integer personId = jdbcTemplate.queryForObject("SELECT book_id FROM book WHERE person_id=?", new Object[]{id}, Integer.class);
+        return personId != null;
+    }
+
 }

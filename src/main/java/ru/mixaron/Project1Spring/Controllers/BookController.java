@@ -1,9 +1,11 @@
 package ru.mixaron.Project1Spring.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.mixaron.Project1Spring.DAO.DaoFile;
 import ru.mixaron.Project1Spring.DAO.DaoFileBook;
 import ru.mixaron.Project1Spring.PersonAndBooks.Book;
 
@@ -11,10 +13,12 @@ import ru.mixaron.Project1Spring.PersonAndBooks.Book;
 @RequestMapping("/books")
 public class BookController {
     private final DaoFileBook daoFileBook;
+    private final DaoFile daoFile;
 
     @Autowired
-    BookController(DaoFileBook daoFileBook) {
+    BookController(DaoFileBook daoFileBook, DaoFile daoFile) {
         this.daoFileBook = daoFileBook;
+        this.daoFile = daoFile;
     }
 
 
@@ -41,6 +45,12 @@ public class BookController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("book", daoFileBook.showBook(id));
+        model.addAttribute("person", daoFile.show(id));
+        try {
+            model.addAttribute("personId", daoFileBook.isPerson(id));
+        } catch (EmptyResultDataAccessException e) {
+            model.addAttribute("personId", false);
+        }
         return "books/show";
     }
 

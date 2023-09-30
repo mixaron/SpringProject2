@@ -8,6 +8,10 @@
 <p th:text="${book.getBook_name()}">Value</p>
 <p th:text="${book.getBook_author()}">Value</p>
 <p th:text="${book.getYear()}">Value</p>
+<br>
+<p th:if="personId" th:text="${'Эта книга сейчас у: ' + person.person_name}"></p>
+<p th:if="!personId">Эта книга свободна.</p>
+<hr>
 <form th:method="POST" th:action="@{/books/{id}(id=${book.getBook_id()})}">
     <input type="hidden" name="_method" value="DELETE" />
     <input type="submit" value="Удалить">

@@ -7,6 +7,12 @@
 <body>
 <p th:text="${person.getPerson_name()}">Value</p>
 <p th:text="${person.getPerson_bd()}">Value</p>
+<div th:if="${book}" th:each="books : ${book}">
+    <p th:text="${books.getBook_name() + ', '
+    + books.getBook_author() + ', ' + books.getYear()}"></p>
+</div>
+<p th:if="${#lists.isEmpty(book)}">Человек пока не взял ни одной книги</p>
+
 <form th:method="POST" th:action="@{/people/{id}(id=${person.getPerson_id()})}">
     <input type="hidden" name="_method" value="DELETE" />
     <input type="submit" value="Удалить">
