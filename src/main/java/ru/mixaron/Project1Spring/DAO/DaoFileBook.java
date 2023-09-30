@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.mixaron.Project1Spring.PersonAndBooks.Book;
+import ru.mixaron.Project1Spring.PersonAndBooks.Person;
 
 import java.util.List;
 
@@ -44,8 +45,14 @@ public class DaoFileBook {
 
 
     public boolean isPerson(int id) {
-        Integer personId = jdbcTemplate.queryForObject("SELECT book_id FROM book WHERE person_id=?", new Object[]{id}, Integer.class);
+        Integer personId = jdbcTemplate.queryForObject("SELECT person_id FROM book JOIN person USING(person_id) WHERE book_id=?", new Object[]{id}, Integer.class);
         return personId != null;
     }
 
+
+    public Person showPerson(int id) {
+        return jdbcTemplate.query("SELECT person_name, person_bd, person_id FROM person JOIN book USING(person_id) WHERE book_id=?"
+                        , new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
+                .stream().findAny().orElse(null);
+    }
 }

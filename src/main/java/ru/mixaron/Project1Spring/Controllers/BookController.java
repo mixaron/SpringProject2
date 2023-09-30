@@ -45,7 +45,7 @@ public class BookController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("book", daoFileBook.showBook(id));
-        model.addAttribute("person", daoFile.show(id));
+        model.addAttribute("person", daoFileBook.showPerson(id));
         try {
             model.addAttribute("personId", daoFileBook.isPerson(id));
         } catch (EmptyResultDataAccessException e) {
