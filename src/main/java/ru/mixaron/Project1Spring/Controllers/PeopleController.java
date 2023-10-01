@@ -19,14 +19,12 @@ import ru.mixaron.Project1Spring.util.PersonValidator;
 public class PeopleController {
     private final DaoFile daoFile;
 
-    private  final DaoFileBook daoFileBook;
 
     private final PersonValidator personValidator;
 
     @Autowired
     PeopleController(DaoFile daoFile, DaoFileBook daoFileBook, PersonValidator personValidator) {
         this.daoFile = daoFile;
-        this.daoFileBook = daoFileBook;
         this.personValidator = personValidator;
     }
 
@@ -55,15 +53,16 @@ public class PeopleController {
         return "people/watchPeople";
     }
 
+
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", daoFile.show(id));
-        try {
+//        try {
             model.addAttribute("book", daoFile.indexByBooks(id));
-        } catch (EmptyResultDataAccessException e) {
-            model.addAttribute("book", false);
-//            model.addAttribute("books", null);
-        }
+//        } catch (EmptyResultDataAccessException e) {
+//            model.addAttribute("book", false);
+////            model.addAttribute("books", null);
+//        }
         return "people/show";
     }
 
