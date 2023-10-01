@@ -1,7 +1,6 @@
 package ru.mixaron.Project1Spring.DAO;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -54,5 +53,10 @@ public class DaoFileBook {
         return jdbcTemplate.query("SELECT person_name, person_bd, person_id FROM person JOIN book USING(person_id) WHERE book_id=?"
                         , new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
                 .stream().findAny().orElse(null);
+    }
+
+    public Object clearPerson(int id) {
+        jdbcTemplate.update("UPDATE book SET person_id = null WHERE book_id=?", id);
+        return null;
     }
 }

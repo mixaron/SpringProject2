@@ -9,7 +9,12 @@
 <p th:text="${book.getBook_author()}">Value</p>
 <p th:text="${book.getYear()}">Value</p>
 <br>
-<p th:if="${personId}" th:text="${'Эта книга сейчас у: ' + person.person_name}"></p>
+<div th:if="${personId}">
+    <p th:text="${'Эта книга сейчас у: ' + person.person_name}"></p>
+    <form th:method="POST" th:action="@{/books/{id}(id=${book.getBook_id()})}">
+        <input type="submit" value="Освободить книгу">
+    </form>
+</div>
 <p th:if="${!personId}">Эта книга свободна.</p>
 <hr>
 <form th:method="POST" th:action="@{/books/{id}(id=${book.getBook_id()})}">

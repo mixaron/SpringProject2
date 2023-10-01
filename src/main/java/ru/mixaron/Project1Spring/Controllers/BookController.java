@@ -54,6 +54,19 @@ public class BookController {
         return "books/show";
     }
 
+    @PostMapping("/{id}")
+    public String clearPerson(@PathVariable("id") int id, Model model) {
+        model.addAttribute("AuthorD", daoFileBook.clearPerson(id));
+        model.addAttribute("book", daoFileBook.showBook(id));
+        model.addAttribute("person", daoFileBook.showPerson(id));
+        try {
+            model.addAttribute("personId", daoFileBook.isPerson(id));
+        } catch (EmptyResultDataAccessException e) {
+            model.addAttribute("personId", false);
+        }
+        return "books/show";
+    }
+
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
         model.addAttribute("bookEdit", daoFileBook.showBook(id));
