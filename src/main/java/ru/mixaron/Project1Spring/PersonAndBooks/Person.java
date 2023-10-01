@@ -1,5 +1,7 @@
 package ru.mixaron.Project1Spring.PersonAndBooks;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
@@ -8,8 +10,8 @@ public class Person {
     @Size(min = 2, max = 50, message = "Name cant be so small or so big")
     private String person_name;
 
-    @NotEmpty(message = "BD CANT be Empty")
-    @Size(min = 4, max = 4, message = "BD must consist from 4 symbols")
+    @Min(value = 1900, message = "Значение должно быть больше или равно 0")
+    @Max(value = 2023, message = "Значение должно быть меньше или равно 100")
     private int person_bd;
 
     private int person_id;

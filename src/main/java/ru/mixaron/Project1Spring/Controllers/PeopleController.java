@@ -1,14 +1,18 @@
 package ru.mixaron.Project1Spring.Controllers;
 
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.mixaron.Project1Spring.DAO.DaoFile;
 import ru.mixaron.Project1Spring.DAO.DaoFileBook;
 import ru.mixaron.Project1Spring.PersonAndBooks.Person;
+import ru.mixaron.Project1Spring.util.PersonValidator;
 
 @Controller
 @RequestMapping("/people")
@@ -17,10 +21,13 @@ public class PeopleController {
 
     private  final DaoFileBook daoFileBook;
 
+    private final PersonValidator personValidator;
+
     @Autowired
-    PeopleController(DaoFile daoFile, DaoFileBook daoFileBook) {
+    PeopleController(DaoFile daoFile, DaoFileBook daoFileBook, PersonValidator personValidator) {
         this.daoFile = daoFile;
         this.daoFileBook = daoFileBook;
+        this.personValidator = personValidator;
     }
 
 
@@ -39,7 +46,11 @@ public class PeopleController {
     }
 
     @PostMapping
-    public String savePost(@ModelAttribute("person") Person person) {
+    public String savePost(@ModelAttribute("person") @Valid Person person, BindingResult bi) {
+        personValidator.validate(person, bi);
+        if (bi.hasErrors()) {
+            return "people/new";
+        }
         daoFile.newPerson(person);
         return "people/watchPeople";
     }
@@ -57,12 +68,16 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") int id, Model model) {
+    public String edit(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
         model.addAttribute("personEdit", daoFile.show(id));
         return "people/edit";
     }
     @PatchMapping("/{id}")
-    public String edit(@PathVariable("id") int id, @ModelAttribute("editPerson") Person person) {
+    public String edit(@PathVariable("id") int id, @ModelAttribute("editPerson") @Valid Person person, BindingResult bi) {
+        personValidator.validate(person, bi);
+        if (bi.hasErrors()) {
+            return "people/edit";
+        }
         daoFile.update(id, person);
         return "redirect:/people";
     }

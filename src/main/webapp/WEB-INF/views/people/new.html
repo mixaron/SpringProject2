@@ -8,9 +8,11 @@
 <form th:method="POST" th:action="@{/people}" th:object="${person}">
     <label for="person_name">Напишите Имя:</label>
     <input type="text" th:field="*{person_name}" id="person_name">
+    <div th:if="${#fields.hasErrors('person_name')}" th:errors="*{person_name}"></div>
     <br>
     <label for="person_bd">Напишите Дату рождения:</label>
     <input type="text" th:field="*{person_bd}" id="person_bd">
+    <div th:if="${#fields.hasErrors('person_bd')}" th:errors="*{person_bd}"></div>
     <br>
     <input type="submit" value="Успешно!">
 

@@ -8,6 +8,7 @@ import ru.mixaron.Project1Spring.PersonAndBooks.Book;
 import ru.mixaron.Project1Spring.PersonAndBooks.Person;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class DaoFile {
@@ -54,5 +55,10 @@ public class DaoFile {
 
     public void changedPerson(int id, int person_id) {
         jdbcTemplate.update("UPDATE book SET person_id=? WHERE book_id=?", person_id, id);
+    }
+
+    public Optional<Person> showName(String name) {
+        return jdbcTemplate.query("SELECT * FROM person WHERE person_name=?", new Object[]{name},
+                new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
     }
 }
