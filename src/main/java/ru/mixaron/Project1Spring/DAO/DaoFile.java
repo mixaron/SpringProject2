@@ -51,4 +51,8 @@ public class DaoFile {
         return jdbcTemplate.query("SELECT book_name, book_author, year FROM book JOIN person USING(person_id) WHERE person_id=?",
                 new Object[]{id}, new BeanPropertyRowMapper<>(Book.class));
     }
+
+    public void changedPerson(int id, int person_id) {
+        jdbcTemplate.update("UPDATE book SET person_id=? WHERE book_id=?", person_id, id);
+    }
 }

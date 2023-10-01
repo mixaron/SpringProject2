@@ -1,27 +1,36 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Изменить книгу</title>
-</head>
-<body>
-<p th:text="${book.getBook_name()}">Value</p>
-<p th:text="${book.getBook_author()}">Value</p>
-<p th:text="${book.getYear()}">Value</p>
-<br>
-<div th:if="${personId}">
-    <p th:text="${'Эта книга сейчас у: ' + person.person_name}"></p>
+    <!DOCTYPE html>
+    <html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Изменить книгу</title>
+    </head>
+    <body>
+    <p th:text="${book.getBook_name() + ', ' + book.getBook_author() + ', ' + book.getYear()}">Value</p>
+    <br>
+
+    <div th:if="${personId}">
+        <p th:text="${'Эта книга сейчас у: ' + person.person_name}"></p>
+        <form th:method="POST" th:action="@{/books/{id}(id=${book.getBook_id()})}">
+            <input type="submit" value="Освободить книгу">
+        </form>
+    </div>
+    <div th:if="${!personId}">
+        <p>Эта книга свободна.</p>
+        <form th:method="POST" th:action="@{/books/{id}/add(id=${book.getBook_id()})}">
+            <label for="person">Выберите человека</label>
+            <select th:object="${person123}" th:field="*{person_id}" id="person">
+                <option th:each="person : ${people}" th:value="${person.getPerson_id()}"
+                        th:text="${person.getPerson_name()}"></option >
+            </select>
+            <input type="submit" value="Назначить книгу">
+        </form>
+    </div>
+    <hr>
     <form th:method="POST" th:action="@{/books/{id}(id=${book.getBook_id()})}">
-        <input type="submit" value="Освободить книгу">
+        <input type="hidden" name="_method" value="DELETE" />
+        <input type="submit" value="Удалить">
     </form>
-</div>
-<p th:if="${!personId}">Эта книга свободна.</p>
-<hr>
-<form th:method="POST" th:action="@{/books/{id}(id=${book.getBook_id()})}">
-    <input type="hidden" name="_method" value="DELETE" />
-    <input type="submit" value="Удалить">
-</form>
-<a th:href="@{/books/{id}/edit(id=${book.getBook_id()})}">Изменить что-то</a> <br>
-<a href="/books">Обратно к книгам</a>
-</body>
-</html>
+    <a th:href="@{/books/{id}/edit(id=${book.getBook_id()})}">Изменить что-то</a> <br>
+    <a href="/books">Обратно к книгам</a>
+    </body>
+    </html>

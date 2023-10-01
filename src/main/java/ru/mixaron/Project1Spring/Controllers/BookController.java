@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.mixaron.Project1Spring.DAO.DaoFile;
 import ru.mixaron.Project1Spring.DAO.DaoFileBook;
 import ru.mixaron.Project1Spring.PersonAndBooks.Book;
+import ru.mixaron.Project1Spring.PersonAndBooks.Person;
 
 @Controller
 @RequestMapping("/books")
@@ -42,7 +43,23 @@ public class BookController {
         return "books/watchBook";
     }
 
+
+
     @GetMapping("/{id}")
+    public String clearPerson(@PathVariable("id") int id, Model model) {
+//        model.addAttribute("AuthorD", daoFileBook.clearPerson(id));
+        model.addAttribute("book", daoFileBook.showBook(id));
+        model.addAttribute("person", daoFileBook.showPerson(id));
+        model.addAttribute("people", daoFile.index());
+        model.addAttribute("person123", new Person());
+        try {
+            model.addAttribute("personId", daoFileBook.isPerson(id));
+        } catch (EmptyResultDataAccessException e) {
+            model.addAttribute("personId", false);
+        }
+        return "books/show";
+    }
+    @PostMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("book", daoFileBook.showBook(id));
         model.addAttribute("person", daoFileBook.showPerson(id));
@@ -54,9 +71,10 @@ public class BookController {
         return "books/show";
     }
 
-    @PostMapping("/{id}")
-    public String clearPerson(@PathVariable("id") int id, Model model) {
-        model.addAttribute("AuthorD", daoFileBook.clearPerson(id));
+    @PostMapping("/{id}/add")
+    public String add(@PathVariable("id") int id, Model model, @ModelAttribute("person123") Person person) {
+        daoFile.changedPerson(id, person.getPerson_id());
+        System.out.println(person.getPerson_id());
         model.addAttribute("book", daoFileBook.showBook(id));
         model.addAttribute("person", daoFileBook.showPerson(id));
         try {
@@ -64,7 +82,8 @@ public class BookController {
         } catch (EmptyResultDataAccessException e) {
             model.addAttribute("personId", false);
         }
-        return "books/show";
+        System.out.println(person.getPerson_id());
+        return "redirect:/books";
     }
 
     @GetMapping("/{id}/edit")
