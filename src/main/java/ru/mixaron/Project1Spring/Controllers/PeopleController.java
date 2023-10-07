@@ -3,28 +3,31 @@ package ru.mixaron.Project1Spring.Controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import ru.mixaron.Project1Spring.DAO.DaoFile;
-import ru.mixaron.Project1Spring.DAO.DaoFileBook;
+import ru.mixaron.Project1Spring.PersonAndBooks.Book;
 import ru.mixaron.Project1Spring.PersonAndBooks.Person;
+import ru.mixaron.Project1Spring.services.BookService;
+import ru.mixaron.Project1Spring.services.PersonService;
 import ru.mixaron.Project1Spring.util.PersonValidator;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
-    private final DaoFile daoFile;
+    private final PersonService personService;
 
+    private final BookService bookService;
 
     private final PersonValidator personValidator;
 
     @Autowired
-    PeopleController(DaoFile daoFile, DaoFileBook daoFileBook, PersonValidator personValidator) {
-        this.daoFile = daoFile;
+    PeopleController(PersonService personService, BookService bookService, PersonValidator personValidator) {
+        this.personService = personService;
+        this.bookService = bookService;
         this.personValidator = personValidator;
     }
 
@@ -33,9 +36,10 @@ public class PeopleController {
     public String goIndex() {
         return "people/index";
     }
+
     @GetMapping("/watchpeople")
     public String watch(Model model) {
-        model.addAttribute("person", daoFile.index());
+        model.addAttribute("person", personService.index());
         return "people/watchPeople";
     }
     @GetMapping("/new")
@@ -49,26 +53,22 @@ public class PeopleController {
         if (bi.hasErrors()) {
             return "people/new";
         }
-        daoFile.newPerson(person);
+        personService.newPerson(person);
         return "people/watchPeople";
     }
 
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", daoFile.show(id));
-//        try {
-            model.addAttribute("book", daoFile.indexByBooks(id));
-//        } catch (EmptyResultDataAccessException e) {
-//            model.addAttribute("book", false);
-////            model.addAttribute("books", null);
-//        }
+
+        model.addAttribute("person", personService.show(id));
+            model.addAttribute("book", personService.indexByBooks(id));
         return "people/show";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
-        model.addAttribute("personEdit", daoFile.show(id));
+        model.addAttribute("personEdit", personService.show(id));
         return "people/edit";
     }
     @PatchMapping("/{id}")
@@ -77,13 +77,13 @@ public class PeopleController {
         if (bi.hasErrors()) {
             return "people/edit";
         }
-        daoFile.update(id, person);
+        personService.update(id, person);
         return "redirect:/people";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
-        daoFile.delete(id);
+        personService.delete(id);
         return "redirect:/people";
     }
 }

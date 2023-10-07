@@ -4,18 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.mixaron.Project1Spring.DAO.DaoFile;
 import ru.mixaron.Project1Spring.PersonAndBooks.Person;
+import ru.mixaron.Project1Spring.services.PersonService;
 
 @Component
 public class PersonValidator  implements Validator {
 
-    private final DaoFile daoFile;
+    private final PersonService personService;
 
 
     @Autowired
-    public PersonValidator(DaoFile daoFile) {
-        this.daoFile = daoFile;
+    public PersonValidator(PersonService personService) {
+        this.personService = personService;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class PersonValidator  implements Validator {
         Person person = (Person) target;
 
 
-        if (daoFile.showName(person.getPerson_name()).isPresent())
-            errors.rejectValue("person_name", "", "This name not Unique");
+//        if (personService.showName(person.getPerson_name()) != null)
+//            errors.rejectValue("person_name", "", "This name not Unique");
     }
 }

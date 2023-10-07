@@ -6,8 +6,9 @@
 </head>
 <body>
 <p th:text="${person.getPerson_name()} + ', ' + ${person.getPerson_bd()} ">Value</p>
-<div th:if="${book}" th:each="books : ${book}">
-    <p th:text="${books.getBook_name() + ', '
+<div th:if="${not #lists.isEmpty(book)}"  th:each="books : ${book}">
+    <p th:style="'color: ' + (${books.isDateNow() ? 'red' : 'black'}) + ';'"
+       th:text="${books.getBook_name() + ', '
     + books.getBook_author() + ', ' + books.getYear()}"></p>
 </div>
 <p th:if="${#lists.isEmpty(book)}">Человек пока не взял ни одной книги</p>
@@ -21,3 +22,5 @@
 <a href="/people/watchpeople">Обратно к Людям</a>
 </body>
 </html>
+
+<!--   th:if="${not #lists.isEmpty(book)}" -->
